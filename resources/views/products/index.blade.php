@@ -18,13 +18,13 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center py-6">
                     <div class="flex items-center">
-                        <h1 class="text-3xl font-bold text-gray-900">Product Search</h1>
+                        <h1 class="text-3xl font-bold text-gray-900">Busca de Produtos</h1>
                         <span class="ml-3 px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
                             Laravel 11 + Livewire
                         </span>
                     </div>
                     <div class="text-sm text-gray-500">
-                        Built with Laravel Sail & PostgreSQL
+                        Desenvolvido com Laravel Sail & PostgreSQL
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
         <footer class="bg-white border-t mt-12">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                 <div class="text-center text-sm text-gray-500">
-                    <p>&copy; {{ date('Y') }} Product Search Demo. Built for technical assessment.</p>
+                    <p>&copy; {{ date('Y') }} Demo de Busca de Produtos. Desenvolvido para avaliação técnica.</p>
                 </div>
             </div>
         </footer>

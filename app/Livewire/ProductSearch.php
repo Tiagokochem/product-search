@@ -28,6 +28,15 @@ class ProductSearch extends Component
     #[Url(keep: true)]
     public string $sortDirection = 'asc';
 
+    #[Url(keep: true)]
+    public ?float $minPrice = null;
+
+    #[Url(keep: true)]
+    public ?float $maxPrice = null;
+
+    #[Url(keep: true)]
+    public bool $inStockOnly = false;
+
     public int $perPage = 12;
 
     protected $queryString = [
@@ -75,8 +84,26 @@ class ProductSearch extends Component
         $this->search = '';
         $this->selectedCategories = [];
         $this->selectedBrands = [];
+        $this->minPrice = null;
+        $this->maxPrice = null;
+        $this->inStockOnly = false;
         $this->sortBy = 'name';
         $this->sortDirection = 'asc';
+        $this->resetPage();
+    }
+
+    public function updatedMinPrice()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedMaxPrice()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedInStockOnly()
+    {
         $this->resetPage();
     }
 
@@ -110,13 +137,23 @@ class ProductSearch extends Component
             'search' => $this->search,
             'categories' => $this->selectedCategories,
             'brands' => $this->selectedBrands,
+            'min_price' => $this->minPrice,
+            'max_price' => $this->maxPrice,
+            'in_stock_only' => $this->inStockOnly,
             'sort_by' => $this->sortBy,
             'sort_direction' => $this->sortDirection,
         ];
 
         $products = $this->productService->searchProducts($filters, $this->perPage);
-        $categories = Category::where('active', true)->orderBy('name')->get();
-        $brands = Brand::where('active', true)->orderBy('name')->get();
+        
+        // Cache categories and brands for 1 hour
+        $categories = \Cache::remember('active_categories', 3600, function () {
+            return Category::where('active', true)->orderBy('name')->get();
+        });
+        
+        $brands = \Cache::remember('active_brands', 3600, function () {
+            return Brand::where('active', true)->orderBy('name')->get();
+        });
 
         return view('livewire.product-search', [
             'products' => $products,

@@ -13,7 +13,8 @@ class ProductService
     public function searchProducts(array $filters = [], int $perPage = 12): LengthAwarePaginator
     {
         $query = Product::query()
-            ->with(['category', 'brand'])
+            ->with(['category:id,name', 'brand:id,name'])
+            ->select(['id', 'name', 'slug', 'description', 'price', 'sku', 'stock_quantity', 'category_id', 'brand_id', 'active', 'created_at'])
             ->active();
 
         // Apply search filter
@@ -31,14 +32,35 @@ class ProductService
             $query->byBrand($filters['brands']);
         }
 
+        // Apply price range filter
+        if (!empty($filters['min_price'])) {
+            $query->where('price', '>=', $filters['min_price']);
+        }
+        
+        if (!empty($filters['max_price'])) {
+            $query->where('price', '<=', $filters['max_price']);
+        }
+
+        // Apply stock filter
+        if (!empty($filters['in_stock_only'])) {
+            $query->inStock();
+        }
+
         // Apply sorting
         $sortBy = $filters['sort_by'] ?? 'name';
         $sortDirection = $filters['sort_direction'] ?? 'asc';
         
         match ($sortBy) {
             'price' => $query->orderBy('price', $sortDirection),
+            'name' => $query->orderBy('name', $sortDirection),
             'created_at' => $query->orderBy('created_at', $sortDirection),
             'stock' => $query->orderBy('stock_quantity', $sortDirection),
+            'category' => $query->join('categories', 'products.category_id', '=', 'categories.id')
+                               ->orderBy('categories.name', $sortDirection)
+                               ->select('products.*'),
+            'brand' => $query->join('brands', 'products.brand_id', '=', 'brands.id')
+                            ->orderBy('brands.name', $sortDirection)
+                            ->select('products.*'),
             default => $query->orderBy('name', $sortDirection),
         };
 
