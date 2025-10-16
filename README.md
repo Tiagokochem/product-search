@@ -68,7 +68,7 @@ products: id, name, slug, description, price, sku, stock_quantity,
 
 ### 1. Clone o repositório
 ```bash
-git clone <repository-url>
+git clone https://github.com/Tiagokochem/product-search
 cd mood
 ```
 
