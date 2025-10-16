@@ -1,0 +1,52 @@
+# Laravel
+product-search/node_modules
+product-search/public/build
+product-search/public/hot
+product-search/public/storage
+product-search/storage/*.key
+product-search/vendor
+product-search/.env
+product-search/.env.backup
+product-search/.env.production
+product-search/.phpunit.result.cache
+product-search/Homestead.json
+product-search/Homestead.yaml
+product-search/auth.json
+product-search/npm-debug.log
+product-search/yarn-error.log
+
+# IDE
+/.fleet
+/.idea
+/.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+product-search/storage/logs/*.log
+
+# Cache
+product-search/bootstrap/cache/*.php
+product-search/storage/framework/cache/data/*
+product-search/storage/framework/sessions/*
+product-search/storage/framework/views/*
+
+# Testing
+coverage/
+product-search/.phpunit.cache
+
+# Docker
+product-search/docker-compose.override.yml
+
+# Sail
+product-search/docker
