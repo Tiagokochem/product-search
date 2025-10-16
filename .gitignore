@@ -1,19 +1,19 @@
 # Laravel
-product-search/node_modules
-product-search/public/build
-product-search/public/hot
-product-search/public/storage
-product-search/storage/*.key
-product-search/vendor
-product-search/.env
-product-search/.env.backup
-product-search/.env.production
-product-search/.phpunit.result.cache
-product-search/Homestead.json
-product-search/Homestead.yaml
-product-search/auth.json
-product-search/npm-debug.log
-product-search/yarn-error.log
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+/.env
+/.env.backup
+/.env.production
+/.phpunit.result.cache
+/Homestead.json
+/Homestead.yaml
+/auth.json
+/npm-debug.log
+/yarn-error.log
 
 # IDE
 /.fleet
@@ -33,20 +33,20 @@ Thumbs.db
 
 # Logs
 *.log
-product-search/storage/logs/*.log
+/storage/logs/*.log
 
 # Cache
-product-search/bootstrap/cache/*.php
-product-search/storage/framework/cache/data/*
-product-search/storage/framework/sessions/*
-product-search/storage/framework/views/*
+/bootstrap/cache/*.php
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/views/*
 
 # Testing
 coverage/
-product-search/.phpunit.cache
+/.phpunit.cache
 
 # Docker
-product-search/docker-compose.override.yml
+/docker-compose.override.yml
 
 # Sail
-product-search/docker
+/docker
