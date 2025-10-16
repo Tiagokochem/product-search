@@ -37,6 +37,8 @@ class ProductSearch extends Component
     #[Url(keep: true)]
     public bool $inStockOnly = false;
 
+    public bool $showAllBrands = false;
+
     public int $perPage = 12;
 
     protected $queryString = [
@@ -104,6 +106,12 @@ class ProductSearch extends Component
 
     public function updatedInStockOnly()
     {
+        $this->resetPage();
+    }
+
+    public function toggleSortDirection()
+    {
+        $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         $this->resetPage();
     }
 
