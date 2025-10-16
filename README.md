@@ -72,27 +72,37 @@ git clone <repository-url>
 cd mood
 ```
 
-### 2. Inicie o ambiente Docker
+### 2. Instale as dependências (primeira execução)
+```bash
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php84-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+### 3. Copie o arquivo de ambiente
+```bash
+cp .env.example .env
+```
+
+### 4. Inicie o ambiente Docker
 ```bash
 ./vendor/bin/sail up -d
 ```
 
-### 3. Instale as dependências
-```bash
-./vendor/bin/sail composer install
-```
-
-### 4. Configure o ambiente
+### 5. Configure o ambiente
 ```bash
 ./vendor/bin/sail artisan key:generate
 ```
 
-### 5. Execute as migrations e seeders
+### 6. Execute as migrations e seeders
 ```bash
 ./vendor/bin/sail artisan migrate --seed
 ```
 
-### 6. Acesse a aplicação
+### 7. Acesse a aplicação
 - **Frontend**: http://localhost
 - **Banco de dados**: localhost:5432
   - Database: `laravel`
@@ -223,6 +233,43 @@ O seeder cria automaticamente produtos brasileiros:
 - **Docker otimizado** para desenvolvimento
 - **Tratamento de erros** adequado
 - **Validações** em todos os níveis
+
+## 🔧 Troubleshooting
+
+### Problemas Comuns
+
+**Erro: "vendor/bin/sail: No such file or directory"**
+```bash
+# Execute primeiro a instalação das dependências
+docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php84-composer:latest \
+    composer install --ignore-platform-reqs
+```
+
+**Erro: "Port 5432 already in use"**
+```bash
+# Pare outros containers PostgreSQL
+docker ps | grep postgres
+docker stop <container-id>
+```
+
+**Erro: "Port 80 already in use"**
+```bash
+# Use uma porta diferente
+echo "APP_PORT=8080" >> .env
+./vendor/bin/sail up -d
+# Acesse: http://localhost:8080
+```
+
+**Reset completo do ambiente**
+```bash
+./vendor/bin/sail down -v
+./vendor/bin/sail up -d
+./vendor/bin/sail artisan migrate:fresh --seed
+```
 
 ## 📄 Licença
 
