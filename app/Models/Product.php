@@ -69,9 +69,17 @@ class Product extends Model
 
     public function scopeSearch($query, $search)
     {
-        return $query->where('name', 'ILIKE', "%{$search}%")
-                    ->orWhere('description', 'ILIKE', "%{$search}%")
-                    ->orWhere('sku', 'ILIKE', "%{$search}%");
+        if (empty($search)) {
+            return $query;
+        }
+        
+        $searchTerm = strtolower(trim($search));
+        
+        return $query->where(function ($query) use ($searchTerm) {
+            $query->whereRaw('LOWER(name) LIKE ?', ["%{$searchTerm}%"])
+                ->orWhereRaw('LOWER(description) LIKE ?', ["%{$searchTerm}%"])
+                ->orWhereRaw('LOWER(sku) LIKE ?', ["%{$searchTerm}%"]);
+        });
     }
 
     public function scopeByCategory($query, $categoryIds)

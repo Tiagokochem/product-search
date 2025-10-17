@@ -12,11 +12,24 @@ class ProductService
 {
     public function searchProducts(array $filters = [], int $perPage = 12): LengthAwarePaginator
     {
-        $query = Product::query()
-            ->with(['category:id,name', 'brand:id,name'])
-            ->select(['id', 'name', 'slug', 'description', 'price', 'sku', 'stock_quantity', 'category_id', 'brand_id', 'active', 'created_at'])
-            ->active();
+        // Create cache key based on filters
+        $cacheKey = 'products_search_' . md5(serialize($filters) . $perPage);
+        
+        return \Cache::remember($cacheKey, 300, function () use ($filters, $perPage) {
+            $query = Product::query()
+                ->with(['category:id,name', 'brand:id,name'])
+                ->select(['id', 'name', 'slug', 'description', 'price', 'sku', 'stock_quantity', 'category_id', 'brand_id', 'active', 'created_at'])
+                ->active();
 
+            $this->applyFilters($query, $filters);
+            $this->applySorting($query, $filters);
+
+            return $query->paginate($perPage);
+        });
+    }
+
+    private function applyFilters($query, array $filters): void
+    {
         // Apply search filter
         if (!empty($filters['search'])) {
             $query->search($filters['search']);
@@ -45,8 +58,10 @@ class ProductService
         if (!empty($filters['in_stock_only'])) {
             $query->inStock();
         }
+    }
 
-        // Apply sorting
+    private function applySorting($query, array $filters): void
+    {
         $sortBy = $filters['sort_by'] ?? 'name';
         $sortDirection = $filters['sort_direction'] ?? 'asc';
         
@@ -63,34 +78,36 @@ class ProductService
                             ->select('products.*'),
             default => $query->orderBy('name', $sortDirection),
         };
-
-        return $query->paginate($perPage);
     }
 
     public function getActiveCategories()
     {
-        return Category::active()
-            ->withCount(['products' => function ($query) {
-                $query->where('active', true);
-            }])
-            ->orderBy('name')
-            ->get()
-            ->filter(function ($category) {
-                return $category->products_count > 0;
-            });
+        return \Cache::remember('active_categories_with_counts', 1800, function () {
+            return Category::active()
+                ->withCount(['products' => function ($query) {
+                    $query->where('active', true);
+                }])
+                ->orderBy('name')
+                ->get()
+                ->filter(function ($category) {
+                    return $category->products_count > 0;
+                });
+        });
     }
 
     public function getActiveBrands()
     {
-        return Brand::active()
-            ->withCount(['products' => function ($query) {
-                $query->where('active', true);
-            }])
-            ->orderBy('name')
-            ->get()
-            ->filter(function ($brand) {
-                return $brand->products_count > 0;
-            });
+        return \Cache::remember('active_brands_with_counts', 1800, function () {
+            return Brand::active()
+                ->withCount(['products' => function ($query) {
+                    $query->where('active', true);
+                }])
+                ->orderBy('name')
+                ->get()
+                ->filter(function ($brand) {
+                    return $brand->products_count > 0;
+                });
+        });
     }
 
     public function getFilterCounts(array $filters = []): array

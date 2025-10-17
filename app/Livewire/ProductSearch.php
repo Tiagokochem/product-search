@@ -92,6 +92,19 @@ class ProductSearch extends Component
         $this->sortBy = 'name';
         $this->sortDirection = 'asc';
         $this->resetPage();
+        
+        // Clear relevant caches
+        $this->clearSearchCache();
+    }
+
+    private function clearSearchCache(): void
+    {
+        // Clear product search cache
+        $cacheKeys = \Cache::get('product_search_cache_keys', []);
+        foreach ($cacheKeys as $key) {
+            \Cache::forget($key);
+        }
+        \Cache::forget('product_search_cache_keys');
     }
 
     public function updatedMinPrice()
