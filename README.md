@@ -276,5 +276,7 @@ echo "APP_PORT=8080" >> .env
 Este projeto foi desenvolvido como teste técnico e demonstra as melhores práticas de desenvolvimento Laravel.
 
 ---
+<img width="1400" height="1006" alt="image" src="https://github.com/user-attachments/assets/c20a132e-33c0-451a-97ee-ea09b5765969" />
+
 
 **Desenvolvido com ❤️ usando Laravel 11 + Livewire + PostgreSQL + Docker Sail**
