@@ -69,7 +69,7 @@ products: id, name, slug, description, price, sku, stock_quantity,
 ### 1. Clone o repositório
 ```bash
 git clone https://github.com/Tiagokochem/product-search
-cd mood
+cd product-search
 ```
 
 ### 2. Instale as dependências (primeira execução)
