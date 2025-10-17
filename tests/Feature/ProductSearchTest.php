@@ -181,16 +181,16 @@ class ProductSearchTest extends TestCase
         ]);
 
         Livewire::test('product-search')
-            ->assertSee('Showing')
-            ->assertSee('results');
+            ->assertSee('Exibindo')
+            ->assertSee('resultados');
     }
 
     public function test_no_results_message(): void
     {
         Livewire::test('product-search')
             ->set('search', 'NonExistentProduct')
-            ->assertSee('No products found')
-            ->assertSee('Try adjusting your search or filter criteria');
+            ->assertSee('Nenhum produto encontrado')
+            ->assertSee('Tente ajustar sua busca ou critérios de filtro');
     }
 
     public function test_toggle_category_removes_when_already_selected(): void
