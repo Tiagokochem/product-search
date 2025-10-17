@@ -71,9 +71,11 @@ class ProductService
             'created_at' => $query->orderBy('created_at', $sortDirection),
             'stock' => $query->orderBy('stock_quantity', $sortDirection),
             'category' => $query->join('categories', 'products.category_id', '=', 'categories.id')
+                               ->where('categories.active', true)
                                ->orderBy('categories.name', $sortDirection)
                                ->select('products.*'),
             'brand' => $query->join('brands', 'products.brand_id', '=', 'brands.id')
+                            ->where('brands.active', true)
                             ->orderBy('brands.name', $sortDirection)
                             ->select('products.*'),
             default => $query->orderBy('name', $sortDirection),
